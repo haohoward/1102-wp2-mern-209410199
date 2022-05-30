@@ -6,7 +6,7 @@ import {
   updateUser_99,
 } from '../controller/authController_99.js';
 
-router.route('/regster_99').post(register_99);
+router.route('/register_99').post(register_99);
 router.route('/login_99').post(login_99);
 router.route('/updateUser_99').patch(updateUser_99);
 

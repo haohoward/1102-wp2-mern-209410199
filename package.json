@@ -5,8 +5,11 @@
   "main": "server_99.js",
   "type": "module",
   "scripts": {
-    "start": "node server_99.js",
-    "dev": "nodemon server_99.js"
+    "server": "nodemon server_99.js --ignore client",
+    "client": "npm start --prefix ../client",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\" ",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon server_99"
   },
   "repository": {
     "type": "git",
