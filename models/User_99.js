@@ -1,43 +1,42 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
-
 import jwt from 'jsonwebtoken';
 
 const UserSchema_99 = new mongoose.Schema({
   name: {
     type: String,
-    requires: [true, 'please provide name'],
-    minlength: 3,
-    maxlength: 20,
+    required: [true, 'please provide name'],
+    minLength: 3,
+    maxLength: 20,
     trim: true,
   },
   email: {
     type: String,
-    requires: [true, 'please provide email'],
+    required: [true, 'please provide email'],
     validate: {
       validator: validator.isEmail,
-      massage: 'please provide valid email',
+      message: 'Please provide a valid email ',
     },
     unique: true,
   },
   password: {
     type: String,
-    requires: [true, 'please provide password'],
-    minlength: 6,
-    select: false,
+    required: [true, 'please provide password'],
+    minLength: 6,
+    selected: false,
   },
   lastName: {
     type: String,
-    trim: true,
-    maxlength: 30,
+    maxLength: 30,
     default: 'lastName',
+    trim: true,
   },
   location: {
     type: String,
-    trim: true,
-    maxlength: 30,
+    maxLength: 30,
     default: 'my city',
+    trim: true,
   },
 });
 
@@ -48,9 +47,21 @@ UserSchema_99.pre('save', async function () {
 });
 
 UserSchema_99.methods.createJWT = function () {
-  return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_LIFETIME,
-  });
+  console.log('this', this);
+  return jwt.sign(
+    {
+      userId: this._id,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_LIFETIME }
+  );
+};
+
+UserSchema_99.methods.comparePassword = async function (password) {
+  console.log('test');
+  const isMatch = await bcrypt.compare(password, this.password);
+
+  return isMatch;
 };
 
 export default mongoose.model('User_99', UserSchema_99);
